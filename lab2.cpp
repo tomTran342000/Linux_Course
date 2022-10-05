@@ -38,7 +38,7 @@ class Calc{
         }
 };
 
-int solve(float a, float b, char oper, Calc *cal){
+float solve(float a, float b, char oper, Calc *cal){
     cal->set(a,b);
     switch (oper)
     {
@@ -63,7 +63,7 @@ int solve(float a, float b, char oper, Calc *cal){
 
 void history(string num1, string num2, char oper, float res){
     ofstream myFile;
-    myFile.open("/home/tor9hc/Linux_Course/Lab/Lab2/Linux_Lab2/history.txt", fstream::app);
+    myFile.open("history.txt", fstream::app);
     if(myFile.is_open()){
         myFile << num1 << " " << oper << " " << num2 << " = " << res << endl;
         myFile.close();
@@ -140,7 +140,7 @@ int main(){
         
 
     }
-    //remove("history.txt");
+    remove("../history.txt");
     cout << "ANS = " << ANS;
     
     delete cal;
