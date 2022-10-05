@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <stack>
 using namespace std;
 
 class Calc{
@@ -63,7 +63,7 @@ int solve(float a, float b, char oper, Calc *cal){
 
 void history(string num1, string num2, char oper, float res){
     ofstream myFile;
-    myFile.open("/home/tor9hc/Linux_Course/lab2/history.txt", fstream::app);
+    myFile.open("/home/tor9hc/Linux_Course/Lab/Lab2/Linux_Lab2/history.txt", fstream::app);
     if(myFile.is_open()){
         myFile << num1 << " " << oper << " " << num2 << " = " << res << endl;
         myFile.close();
@@ -72,17 +72,26 @@ void history(string num1, string num2, char oper, float res){
     }
 }
 
-void displayHistory(){
+void displayHistory()
+{
     string line;
     ifstream myFile;
-    myFile.open("/home/tor9hc/Linux_Course/lab2/history.txt");
-    if(myFile.is_open()){
+
+    stack<string> myStack;
+
+    myFile.open("/home/tor9hc/Linux_Course/Lab/Lab2/Linux_Lab2/history.txt");
+    
+    if (myFile.is_open()) {
+        while(getline(myFile, line)){
+            myStack.push(line);
+        }
         for(int i=0;i<5;i++){
-            getline(myFile, line);
-            cout << line << endl;
+            cout << myStack.top() << endl;
+            myStack.pop();
         }
         myFile.close();
-    }else{
+        
+    } else {
         cout << "Unable to open file";
     }
 }
@@ -99,12 +108,15 @@ int main(){
         //Input
         cout << ">> ";
         cin >> num1 >> math >> num2;
+
         //check ANS
-        if(num1 == "ANS"){
+        if(num1 == "ANS" && num2 != "ANS"){
             num1 = to_string(ANS);
         }
-        else if (num2 == "ANS"){
+        else if (num2 == "ANS" && num1 != "ANS"){
             num2 = to_string(ANS);
+        }else if (num1 == "ANS" && num2 == "ANS"){
+            num1 = num2 = to_string(ANS);
         }
         
         float result = solve(stof(num1), stof(num2), math, cal);
@@ -128,9 +140,8 @@ int main(){
         
 
     }
+    //remove("history.txt");
     cout << "ANS = " << ANS;
-
-
     
     delete cal;
     return 0;
